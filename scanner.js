@@ -15,7 +15,7 @@ var signatures = JSON.parse(fs.readFileSync(__dirname + "/common/rules.json", "u
 ScanJS.parser(parser);
 ScanJS.loadRules(signatures);
 
-var argv = require('optimist').usage('Usage: $node scan.js -t [path/to/app] -o [resultFile.json]').demand(['t']).argv;
+var argv = require('optimist').usage('Usage: $node scan.js -t [path/to/app] -o [resultFile.json] --disable-beautify').demand(['t']).argv;
 
 var dive = function(dir, action) {
   if( typeof action !== 'function') {
@@ -65,8 +65,11 @@ if( typeof process != 'undefined' && process.argv[2]) {
 
       if(ext == '.js') {
         var content = fs.readFileSync(fullpath, 'utf8');
-        //beautify source so result snippet is meaningful
-        var content = beautify(content, { indent_size: 2 });
+
+        if (!argv['disable-beautify']) {
+            //beautify source so result snippet is meaningful
+            content = beautify(content, { indent_size: 2 });
+        }
 
         var ast = parser.parse(content, { locations: true });
 
