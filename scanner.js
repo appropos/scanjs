@@ -55,13 +55,11 @@ var writeReport = function(results, name) {
 if( typeof process != 'undefined' && process.argv[2]) {
   results = {};
   reportname = argv.o ? argv.o : 'scanresults';
-  reportdir = reportname + "_files";
-  if(fs.existsSync(reportname) || fs.existsSync(reportdir)) {
+  if(fs.existsSync(reportname)) {
     console.log("Error:output file or dir already exists (" + reportname + "). Supply a different name using: -o [filename]")
 
   } 
   else {
-    fs.mkdirSync(reportdir);
     dive(argv.t, function(file, fullpath) {
       var ext = path.extname(file.toString());
 
